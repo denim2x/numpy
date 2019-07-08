@@ -15,17 +15,32 @@
 #ifndef __NPY_SIMD_INC
 #define __NPY_SIMD_INC
 
+#if @CHK@
+#pragma message ("[SIMD] @TYPE@_@kind@@isa@")
+#endif
+
+#if defined __AVX512F__
+    #define _VECTOR_SIZE_BYTES 64
+#elif defined __AVX2__
+    #define _VECTOR_SIZE_BYTES 32
+#else
+    #define _VECTOR_SIZE_BYTES 32
+#endif
+
+#undef __AVX512F__
+#undef __AVX2__
+
 #include "lowlevel_strided_loops.h"
 #include "numpy/npy_common.h"
 #include "numpy/npy_math.h"
 #ifdef NPY_HAVE_SSE2_INTRINSICS
-#include <emmintrin.h>
+#include <emmintrin.h>   /*
 #if !defined(_MSC_VER) || _MSC_VER >= 1600
 #include <immintrin.h>
 #else
 #undef __AVX2__
 #undef __AVX512F__
-#endif
+#endif                    */
 #endif
 #include <assert.h>
 #include <stdlib.h>
@@ -229,13 +244,7 @@ run_binary_simd_@kind@_@TYPE@(char **args, npy_intp *dimensions, npy_intp *steps
     @type@ * ip2 = (@type@ *)args[1];
     @type@ * op = (@type@ *)args[2];
     npy_intp n = dimensions[0];
-#if defined __AVX512F__
-    const npy_intp vector_size_bytes = 64;
-#elif defined __AVX2__
-    const npy_intp vector_size_bytes = 32;
-#else
-    const npy_intp vector_size_bytes = 32;
-#endif
+    const npy_intp vector_size_bytes = _VECTOR_SIZE_BYTES;
     /* argument one scalar */
     if (IS_BLOCKABLE_BINARY_SCALAR1(sizeof(@type@), vector_size_bytes)) {
         sse2_binary_scalar1_@kind@_@TYPE@(op, ip1, ip2, n);
@@ -449,11 +458,11 @@ static NPY_INLINE npy_double sse2_horizontal_@VOP@___m128d(__m128d v)
  *  #scalarf = npy_sqrtf, npy_sqrt#
  *  #c = f, #
  *  #vtype = __m128, __m128d#
- *  #vtype256 = __m256, __m256d#
- *  #vtype512 = __m512, __m512d#
+ ~  #vtype256 = __m256, __m256d#
+ ~  #vtype512 = __m512, __m512d#
  *  #vpre = _mm, _mm#
- *  #vpre256 = _mm256, _mm256#
- *  #vpre512 = _mm512, _mm512#
+ ~  #vpre256 = _mm256, _mm256#
+ ~  #vpre512 = _mm512, _mm512#
  *  #vsuf = ps, pd#
  *  #vsufs = ss, sd#
  *  #nan = NPY_NANF, NPY_NAN#
