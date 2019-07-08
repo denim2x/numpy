@@ -29,11 +29,26 @@ env:
                iFWt9Ka92CaqYdU7nqfWp9VImSndPmssjmCXJ1v1IjZPAM\
                ahp7Qnm0rWRmA0z9SomuRUQOJQ6s684vU="
 
-python:
+_python:
   - 3.5
   - 3.6
 matrix:
   include:
+    - os: linux-ppc64le
+      python: 3.6
+      env:
+       # for matrix annotation only
+       - PPC64_LE=1
+       # use POWER8 OpenBLAS build, not system ATLAS
+       - ATLAS=None
+  _include:
+    - os: linux-ppc64le
+      python: 3.6
+      env:
+       # for matrix annotation only
+       - PPC64_LE=1
+       # use POWER8 OpenBLAS build, not system ATLAS
+       - ATLAS=None
     - python: 3.7
       env: INSTALL_PICKLE5=1
     - python: 3.5
@@ -69,13 +84,6 @@ matrix:
       env:
        - BLAS=None
        - LAPACK=None
-       - ATLAS=None
-    - os: linux-ppc64le
-      python: 3.6
-      env:
-       # for matrix annotation only
-       - PPC64_LE=1
-       # use POWER8 OpenBLAS build, not system ATLAS
        - ATLAS=None
 
 before_install:

@@ -15,10 +15,6 @@
 #ifndef __NPY_SIMD_INC
 #define __NPY_SIMD_INC
 
-#if @CHK@
-#pragma message ("[SIMD] @TYPE@_@kind@@isa@")
-#endif
-
 #if defined __AVX512F__
     #define _VECTOR_SIZE_BYTES 64
 #elif defined __AVX2__

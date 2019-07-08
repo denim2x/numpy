@@ -727,6 +727,10 @@ NPY_NO_EXPORT void
  */
 
 #if @CHK@
+#pragma message ("[SIMD] TYPE: @TYPE@; isa: @isa@; ISA: @ISA@; CHK: @CHK@")
+#endif
+
+#if @CHK@
 NPY_NO_EXPORT NPY_GCC_OPT_3 @ATTR@ void
 @TYPE@_square@isa@(char **args, npy_intp *dimensions, npy_intp *steps, void *NPY_UNUSED(data))
 {
